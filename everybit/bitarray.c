@@ -108,6 +108,13 @@ static size_t modulo(const ssize_t n, const size_t m);
 static char bitmask(const size_t bit_index);
 
 
+// Reverse the substring
+
+static void bitarray_reverse(bitarray_t *const bitarray,
+                                     const size_t bit_offset,
+                                     const size_t bit_length);
+
+
 // ******************************* Functions ********************************
 
 bitarray_t *bitarray_new(const size_t bit_sz) {
@@ -194,9 +201,22 @@ static void bitarray_rotate_left(bitarray_t *const bitarray,
                                  const size_t bit_offset,
                                  const size_t bit_length,
                                  const size_t bit_left_amount) {
-  for (size_t i = 0; i < bit_left_amount; i++) {
-    bitarray_rotate_left_one(bitarray, bit_offset, bit_length);
-  }
+
+bitarray_reverse(bitarray, bit_offset, bit_left_amount);
+bitarray_reverse(bitarray, bit_offset + bit_left_amount, bit_length - bit_left_amount);
+bitarray_reverse(bitarray, bit_offset, bit_length);
+
+}
+
+static void bitarray_reverse(bitarray_t *const bitarray,
+                             const size_t bit_offset,
+                             const size_t bit_length) {
+	bool temp_bit;
+	for (size_t i = bit_offset; i < (bit_offset + bit_length) / 2; i++) {
+			temp_bit = bitarray_get(bitarray, i);
+			bitarray_set(bitarray, i, bitarray_get(bitarray, bit_offset + bit_length - (i - bit_offset) - 1));
+			bitarray_set(bitarray, bit_offset + bit_length - (i - bit_offset) - 1, temp_bit);
+	}
 }
 
 static void bitarray_rotate_left_one(bitarray_t *const bitarray,
