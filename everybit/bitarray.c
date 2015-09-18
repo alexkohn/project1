@@ -213,9 +213,9 @@ static void bitarray_reverse(bitarray_t *const bitarray,
                              const size_t bit_length) {
 	bool temp_bit;
 	for (size_t i = bit_offset; i < (bit_offset + bit_length) / 2; i++) {
-			temp_bit = bitarray_get(bitarray, i);
-			bitarray_set(bitarray, i, bitarray_get(bitarray, bit_offset + bit_length - (i - bit_offset) - 1));
-			bitarray_set(bitarray, bit_offset + bit_length - (i - bit_offset) - 1, temp_bit);
+			bitarray_set(bitarray, i, bitarray_get(bitarray,i) ^ bitarray_get(bitarray, bit_offset + bit_length - (i - bit_offset) - 1));
+			bitarray_set(bitarray, bit_offset + bit_length - (i - bit_offset) - 1, bitarray_get(bitarray,i) ^ bitarray_get(bitarray, bit_offset + bit_length - (i - bit_offset) - 1));
+			bitarray_set(bitarray, i, bitarray_get(bitarray,i) ^ bitarray_get(bitarray, bit_offset + bit_length - (i - bit_offset) - 1) );
 	}
 }
 
